@@ -1,0 +1,32 @@
+version: '3'
+services:
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./client:/app
+    depends_on:
+      - server
+
+  server:
+    build: ./server
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgres://goncalocoval@db:5432/aloqdb
+    volumes:
+      - ./server:/app
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: goncalocoval
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: aloqdb
+    ports:
+      - "5432:5432"
