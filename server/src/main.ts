@@ -11,6 +11,6 @@ async function bootstrap() {
   app.enableCors();
 
   // Iniciar o servidor na porta 3300
-  await app.listen(3000);
+  await app.listen(3300);
 }
 bootstrap();

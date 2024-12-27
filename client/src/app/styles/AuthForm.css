@@ -1,0 +1,13 @@
+@import url('/fonts/LibreBarcode39Text-Regular.ttf');
+
+@font-face {
+  font-family: 'Libre Barcode 39 Text';
+  src: url('/fonts/LibreBarcode39Text-Regular.ttf') format('truetype');
+}
+
+.title-font {
+  font-family: 'Libre Barcode 39 Text', serif;
+  text-align: left;
+  font-weight: 400;
+  font-style: normal;
+}

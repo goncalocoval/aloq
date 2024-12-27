@@ -18,7 +18,29 @@ model Client {
   name       String
   email      String   @unique
   password   String
-  details    String?  
-  isVerified   Boolean  @default(false)
+  details    String?
+  isVerified Boolean  @default(false)
   createdAt  DateTime @default(now())
+  searches   Search[]
+}
+
+model Park {
+  id                     Int     @id @default(autoincrement())
+  name                   String
+  cost                   Decimal @db.Decimal(10, 2)
+  location               String
+  hasParking             Boolean
+  hasMeetingRooms        Boolean
+  hasOfficeFurniture     Boolean
+  hasWiFiAndPrinter      Boolean
+  hasTransportAndCanteen Boolean
+}
+
+model Search {
+  id        Int      @id @default(autoincrement())
+  clientId  Int
+  criteria  Json
+  result    Json
+  createdAt DateTime @default(now())
+  client    Client   @relation(fields: [clientId], references: [id])
 }
