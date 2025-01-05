@@ -13,6 +13,7 @@ export default function AuthForm() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState(""); // Mensagem de sucesso
+  const [isSubmitting, setIsSubmitting] = useState(false); // Indica se o formulário está sendo enviado
   const router = useRouter();
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
 
@@ -24,6 +25,7 @@ export default function AuthForm() {
     e.preventDefault();
     setError(""); // Resetar erro anterior
     setSuccessMessage(""); // Resetar mensagem de sucesso anterior
+    setIsSubmitting(true); // Iniciar estado de envio
 
     try {
       if (isLogin) {
@@ -48,7 +50,7 @@ export default function AuthForm() {
 
         // Após o registro bem-sucedido, exibir mensagem de sucesso
         setSuccessMessage("Account created successfully! Please check your email to verify your account.");
-        
+
         // Manter email e password preenchidos para o login
         setFormData({
           name: "",
@@ -61,6 +63,8 @@ export default function AuthForm() {
       }
     } catch (err: any) {
       setError(err.response?.data["message"] || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false); // Encerrar estado de envio
     }
   };
 
@@ -93,6 +97,7 @@ export default function AuthForm() {
               isLogin ? "bg-teal-700 text-white" : "bg-transparent text-teal-700 hover:bg-gray-200"
             }`}
             onClick={() => setIsLogin(true)}
+            disabled={isSubmitting} // Desativa botão durante envio
           >
             <ArrowRightEndOnRectangleIcon className="w-5 h-5" />
           </button>
@@ -101,6 +106,7 @@ export default function AuthForm() {
               !isLogin ? "bg-teal-700 text-white" : "bg-transparent text-teal-700 hover:bg-gray-200"
             }`}
             onClick={() => setIsLogin(false)}
+            disabled={isSubmitting} // Desativa botão durante envio
           >
             <UserPlusIcon className="w-5 h-5" />
           </button>
@@ -132,18 +138,23 @@ export default function AuthForm() {
                 required
               />
               {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
-              {successMessage && <p className="text-green-500 text-sm mb-3">{successMessage}</p>} {/* Exibe a mensagem de sucesso no login */}
+              {successMessage && <p className="text-green-500 text-sm mb-3">{successMessage}</p>}
               <div className="text-right mb-4">
                 <button
-                  type="button" // Prevenir comportamento de submit
+                  type="button"
                   onClick={() => setIsForgotPasswordOpen(true)}
                   className="text-white hover:underline text-sm"
+                  disabled={isSubmitting} // Desativa botão durante envio
                 >
                   Forgot password?
                 </button>
               </div>
-              <button type="submit" className="w-full bg-white text-teal-700 p-2 rounded transition hover:bg-gray-200">
-                Login &rarr;
+              <button
+                type="submit"
+                className="w-full bg-white text-teal-700 p-2 rounded transition hover:bg-gray-200"
+                disabled={isSubmitting} // Desativa botão durante envio
+              >
+                {isSubmitting ? "Logging In..." : "Login →"}
               </button>
             </>
           ) : (
@@ -181,12 +192,16 @@ export default function AuthForm() {
                 required
               />
               <label className="flex items-center text-white mb-4 text-sm">
-                <input type="checkbox" className="mr-2" required/>
+                <input type="checkbox" className="mr-2" required />
                 I agree with Terms & Conditions
               </label>
               {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
-              <button type="submit" className="w-full bg-white text-teal-700 p-2 rounded transition hover:bg-gray-200">
-                Sign up &rarr;
+              <button
+                type="submit"
+                className="w-full bg-white text-teal-700 p-2 rounded transition hover:bg-gray-200"
+                disabled={isSubmitting} // Desativa botão durante envio
+              >
+                {isSubmitting ? "Signing Up..." : "Sign up →"}
               </button>
             </>
           )}

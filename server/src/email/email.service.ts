@@ -28,7 +28,7 @@ export class EmailService {
             { expiresIn: '30d' } // Expiração do token
         );
     
-        const verificationUrl = `${process.env.FRONTEND_URL}/auth/verify-email?token=${token}`;
+        const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
     
         const mailOptions = {
             from: 'aloqplatform@gmail.com',

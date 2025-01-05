@@ -149,5 +149,28 @@ export class AuthService {
       );
     }
   }
+
+  async verifyEmail(token: string) {
+    try {
+      // Verifica o token
+      const payload = jwt.verify(token, process.env.JWT_SECRET) as { clientId: number };
+
+      // Atualiza o cliente no banco de dados
+      await this.prisma.client.update({
+        where: { id: payload.clientId },
+        data: { isVerified: true },
+      });
+
+      return { message: 'Email verified successfully.' };
+    } catch (error) {
+      console.error('Error during email verification:', error.message);
+
+      // Lança um erro com a mensagem simplificada para token inválido ou expirado
+      throw new HttpException(
+        'Invalid or expired token. Please, request a new verification email.',
+        HttpStatus.BAD_REQUEST, // 400
+      );
+    }
+  }
       
 }

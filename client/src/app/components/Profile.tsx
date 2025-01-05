@@ -102,7 +102,13 @@ export default function Profile() {
         </div>
         <p>
           <strong>Registration Date:</strong>{" "}
-          {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "Loading..."}
+          {user?.createdAt
+            ? new Date(user.createdAt).toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })
+            : "Loading..."}
         </p>
         <p className="flex items-center">
           <strong>Email Verified:</strong>
@@ -154,7 +160,7 @@ export default function Profile() {
           <p className="text-green-500 text-sm mt-2">Password updated successfully!</p>
         )}
         <button
-          className="mt-4 bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800"
+          className="mt-4 bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-800 transition"
           onClick={handleChangePassword}
         >
           Update Password

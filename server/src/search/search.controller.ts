@@ -79,6 +79,20 @@ async getSearchHistory(@Request() req: any) {
 
   // Formatar a resposta para o frontend
   const formattedHistory = history.map((entry) => {
+    let parsedCriteria: any[] = [];
+    if (Array.isArray(entry.criteria)) {
+      // Se o criteria já é um array
+      parsedCriteria = entry.criteria;
+    } else if (typeof entry.criteria === 'string') {
+      // Se o criteria for uma string JSON, parseia
+      try {
+        parsedCriteria = JSON.parse(entry.criteria);
+      } catch (error) {
+        console.error('Error parsing criteria:', error);
+        parsedCriteria = [];
+      }
+    }
+
     let parsedResult: any[] = [];
     if (Array.isArray(entry.result)) {
       // Se o resultado já é um array
@@ -95,7 +109,7 @@ async getSearchHistory(@Request() req: any) {
 
     return {
       id: entry.id,
-      criteria: entry.criteria,
+      criteria: parsedCriteria,
       result: parsedResult.map((res: any) => ({
         park: res.park,
         score: res.score,
@@ -107,5 +121,6 @@ async getSearchHistory(@Request() req: any) {
 
   return { history: formattedHistory };
 }
+
 
 }

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import api from "../../lib/apiService";
 import { InformationCircleIcon, XMarkIcon, CurrencyEuroIcon, MapPinIcon, MapIcon, WifiIcon, ArchiveBoxIcon, ArrowUpIcon, ArrowDownIcon } from "@heroicons/react/24/solid";
-import { PresentationChartBarIcon, StarIcon, TruckIcon } from "@heroicons/react/20/solid";
+import { CheckIcon, PresentationChartBarIcon, StarIcon, TruckIcon, MagnifyingGlassIcon, AdjustmentsHorizontalIcon, ArrowUturnLeftIcon } from "@heroicons/react/20/solid";
 import { useRef } from "react"; // Import useRef
 
 type Criterion = {
@@ -37,8 +37,8 @@ export default function Search() {
   const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [isFocused, setIsFocused] = useState(false); // Para controlar o estado de foco do input
   const resultsRef = useRef<HTMLDivElement | null>(null); // Ref for results section
-  const [sortBy, setSortBy] = useState<"score" | "cost">("score"); // Sorting key
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc"); // Sorting order
+  const [sortBy, setSortBy] = useState<string>("score");
+  const [sortOrder, setSortOrder] = useState<string>("desc");
   const [searchTriggered, setSearchTriggered] = useState(false);
   const [showError, setShowError] = useState(false);
 
@@ -111,6 +111,8 @@ export default function Search() {
     setFilteredSuggestions([]); // Esconde as sugestões
     setSearchTriggered(false); // Resetar flag de pesquisa
     setShowError(false); // Ocultar mensagem de erro
+    setSortBy("score");
+    setSortOrder("desc");
   };
 
   const handleSearch = async () => {
@@ -148,6 +150,8 @@ export default function Search() {
     locationInput?.classList.remove("border-red-500");
 
     setShowError(false);
+    setSortBy("score");
+    setSortOrder("desc");
     setLoading(true);
 
     try {
@@ -245,44 +249,114 @@ export default function Search() {
       {/* Modal de Informações */}
       {infoVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-11/12 max-w-lg relative">
+          <div className="bg-white p-8 rounded-lg shadow-xl w-11/12 max-w-2xl relative">
+            {/* Botão para fechar */}
             <button
               onClick={() => setInfoVisible(false)}
               className="absolute top-4 right-4 bg-red-500 text-white p-2 rounded hover:bg-red-600 transition"
             >
-              <XMarkIcon className="w-5 h-5" />
+              <XMarkIcon className="w-6 h-6" />
             </button>
-            <h2 className="text-xl font-bold mb-4">How to Search</h2>
-            <p className="mb-4 text-gray-600">
-              To perform a search, you can enable one or more criteria, define their values, and set priorities (1-9). Higher priority means more importance in the final result.
-            </p>
-            <h3 className="text-lg font-semibold mb-2">Criteria Information:</h3>
-            <ul className="list-disc ml-6 space-y-2">
-              <li>
-                <strong>Cost:</strong> Maximum budget per month (€).
-              </li>
-              <li>
-                <strong>Location:</strong> Desired city or area.
-              </li>
-              <li>
-                <strong>Parking:</strong> Availability of parking spaces.
-              </li>
-              <li>
-                <strong>Meeting Rooms:</strong> Availability of meeting rooms.
-              </li>
-              <li>
-                <strong>Office With Furniture:</strong> Offices equipped with furniture.
-              </li>
-              <li>
-                <strong>Transport:</strong> Accessibility to public transport.
-              </li>
-              <li>
-                <strong>Canteen:</strong> Availability of on-site dining facilities.
-              </li>
-            </ul>
+
+            {/* Conteúdo do modal com rolagem */}
+            <div className="max-h-[80vh] overflow-y-scroll pe-5">
+              <div className="text-center">
+                <h2 className="text-2xl font-bold text-teal-700 mb-6">About the Search</h2>
+              </div>
+              <div className="space-y-6">
+                {/* Section: How to Search */}
+                <div>
+                  <div className="flex items-center space-x-3">
+                    <MagnifyingGlassIcon className="w-6 h-6 text-teal-700" />
+                    <h3 className="text-lg font-semibold text-teal-700">How to Search</h3>
+                  </div>
+                  <p className="text-gray-600 mt-2">
+                    To perform a search, enable one or more criteria, define their values, and set their priorities (1-9). A higher priority gives more weight to that criteria in the final result.
+                    The AHP method is used to calculate the score of each result based on the selected criteria and priorities.
+                  </p>
+                </div>
+                <hr className="border-1"/>
+                {/* Section: Criteria Information */}
+                <div>
+                  <div className="flex items-center space-x-3">
+                    <InformationCircleIcon className="w-6 h-6 text-teal-700" />
+                    <h3 className="text-lg font-semibold text-teal-700">Criteria Information</h3>
+                  </div>
+                  <ul className="mt-4 grid grid-cols-2 gap-4 text-sm text-gray-600">
+                    <li className="flex items-start space-x-2">
+                      <CurrencyEuroIcon className="w-5 h-5 text-teal-700" />
+                      <span>
+                        <strong>Cost:</strong> Maximum budget per month (€).
+                      </span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <MapIcon className="w-5 h-5 text-teal-700" />
+                      <span>
+                        <strong>Location:</strong> Desired city or area.
+                      </span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <TruckIcon className="w-5 h-5 text-teal-700" />
+                      <span>
+                        <strong>Parking:</strong> Availability of parking spaces.
+                      </span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <PresentationChartBarIcon className="w-5 h-5 text-teal-700" />
+                      <span>
+                        <strong>Meeting Rooms:</strong> Availability of meeting rooms.
+                      </span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <WifiIcon className="w-5 h-5 text-teal-700" />
+                      <span>
+                        <strong>Office With Furniture:</strong> Offices equipped with furniture, like Wi-Fi and Printers.
+                      </span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <MapIcon className="w-5 h-5 text-teal-700" />
+                      <span>
+                        <strong>Transport:</strong> Accessibility to public transports in the area.
+                      </span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <ArchiveBoxIcon className="w-5 h-5 text-teal-700" />
+                      <span>
+                        <strong>Canteen:</strong> Availability of on-site dining facilities or restaurants nearby.
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+                <hr className="border-1"/>
+                {/* Section: Sorting & Results */}
+                <div>
+                  <div className="flex items-center space-x-3">
+                    <AdjustmentsHorizontalIcon className="w-6 h-6 text-teal-700" />
+                    <h3 className="text-lg font-semibold text-teal-700">Sorting & Results</h3>
+                  </div>
+                  <p className="text-gray-600 mt-2">
+                    Results are initially sorted by <strong>Best Results</strong>, calculated based on your selected criteria and priorities. 
+                    You can change the sorting order using the buttons <StarIcon className="w-5 h-5 text-teal-700 inline"/> and <CurrencyEuroIcon className="w-5 h-5 text-teal-700 inline"/> at the top of the results list.
+                    The arrow indicates the current sorting order, from ascending <ArrowUpIcon className="w-5 h-5 text-teal-700 inline"/> to descending <ArrowDownIcon className="w-5 h-5 text-teal-700 inline"/>.
+                  </p>
+                </div>
+                <hr className="border-1"/>
+                {/* Section: Best Results */}
+                <div>
+                  <div className="flex items-center space-x-3">
+                    <StarIcon className="w-6 h-6 text-teal-700" />
+                    <h3 className="text-lg font-semibold text-teal-700">Best Results</h3>
+                  </div>
+                  <p className="text-gray-600 mt-2">
+                    Entries marked with a <StarIcon className="w-5 h-5 inline text-teal-700" /> icon indicate the top results that match your criteria.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
+
 
       <div className="space-y-4">
         {/* Critérios Gerais */}
@@ -290,7 +364,7 @@ export default function Search() {
         <h2 className="text-gray-400 italic">Select Criterias:</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
-            { key: "cost", icon: <CurrencyEuroIcon className="w-5"/>, label: "Cost (€/per month)", extraFields: true },
+            { key: "cost", icon: <CurrencyEuroIcon className="w-5"/>, label: "Cost (€/month)", extraFields: true },
             { key: "location", icon: <MapPinIcon className="w-5"/>, label: "Location", extraFields: true },
             { key: "hasParking", icon: <TruckIcon className="w-5"/>, label: "Parking", extraFields: false },
             { key: "hasMeetingRooms", icon: <PresentationChartBarIcon className="w-5"/>, label: "Meeting Rooms", extraFields: false },
@@ -383,22 +457,24 @@ export default function Search() {
           
           {showError && (
             <div className="text-red-600 font-bold text-sm content-center mr-auto">
-              Please select at least one criterion before searching.
+              Please select at least one criteria before searching.
             </div>
           )}
 
-          <div className="space-x-4 ml-auto">
+          <div className="space-x-4 ml-auto flex">
           <button
             onClick={handleReset}
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition flex items-center"
           >
+            <ArrowUturnLeftIcon className="w-5 h-5 inline me-2" />
             Reset
           </button>
           <button
             onClick={handleSearch}
-            className="bg-teal-700 text-white px-4 py-2 rounded hover:bg-teal-600 transition"
+            className="bg-teal-700 text-white px-4 py-2 rounded content-center hover:bg-teal-600 transition flex items-center"
             disabled={loading}
           >
+            <MagnifyingGlassIcon className="w-5 h-5 inline me-2" />
             {loading ? "Searching..." : "Search"}
           </button>
           </div>
@@ -410,147 +486,149 @@ export default function Search() {
     </div>
     
       {/* Resultados */}
-{searchTriggered && (
-  <div className="bg-white shadow-lg rounded-lg p-6 overflow-y-scroll mt-6">
-    <div className="mt-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 ref={resultsRef} className="text-3xl font-bold text-left text-teal-700">
-          Results
-        </h1>
-        {results.length > 0 && (
-          <div className="flex space-x-4">
-            {/* Ordenar por Melhor Resultado */}
-            <button
-              onClick={() => handleSort("score")}
-              className={`flex items-center bg-teal-700 text-white p-3 rounded-md hover:bg-teal-600 transition ${
-                sortBy === "score" ? "ring-2 ring-teal-300" : ""
-              }`}
-            >
-              <StarIcon className="w-5 h-5" />
-              {sortBy === "score" && (
-                sortOrder === "asc" ? (
-                  <ArrowUpIcon className="w-5 h-5 ml-2" />
-                ) : (
-                  <ArrowDownIcon className="w-5 h-5 ml-2" />
-                )
-              )}
-            </button>
-            {/* Ordenar por Custo */}
-            <button
-              onClick={() => handleSort("cost")}
-              className={`flex items-center bg-teal-700 text-white p-3 rounded-md hover:bg-teal-600 transition ${
-                sortBy === "cost" ? "ring-2 ring-teal-300" : ""
-              }`}
-            >
-              <CurrencyEuroIcon className="w-5 h-5" />
-              {sortBy === "cost" && (
-                sortOrder === "asc" ? (
-                  <ArrowUpIcon className="w-5 h-5 ml-2" />
-                ) : (
-                  <ArrowDownIcon className="w-5 h-5 ml-2" />
-                )
-              )}
-            </button>
-          </div>
-        )}
-      </div>
-      <hr className="mb-6 border-2 rounded" />
-      {results.length > 0 ? (
-        <ul className="space-y-4">
-          {results.map((result, index) => {
-            const bestResults = getBestResults();
-            const isBest = bestResults.some((r) => r.park.name === result.park.name);
-            const isExpanded = expandedIndex === index;
-
-            return (
-              <li
-                key={index}
-                className={`border p-4 rounded-lg shadow-sm transition ${
-                  isBest ? "bg-green-50 border-green-500" : "bg-gray-50 border-gray-300"
-                }`}
-                onClick={() => toggleDetails(index)}
-              >
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h2 className="text-lg font-semibold text-teal-700">
-                      {result.park.name}
-                    </h2>
-                    <p className="text-gray-600">
-                      {result.park.location} &bull; €{result.park.cost}/per month
-                    </p>
-                  </div>
-                  {isBest && (
-                    <div className="text-teal-700">
-                      <StarIcon className="w-6 h-6" />
-                    </div>
-                  )}
+      {searchTriggered && (
+        <div ref={resultsRef} className="bg-white shadow-lg rounded-lg p-6 overflow-y-scroll mt-6">
+          <div className="mt-4">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-3xl font-bold text-left text-teal-700">
+                Results
+              </h1>
+              {results.length > 0 && (
+                <div className="flex space-x-4">
+                  {/* Ordenar por Melhor Resultado */}
+                  <button
+                    onClick={() => handleSort("score")}
+                    className={`flex items-center bg-teal-700 text-white p-3 rounded-md hover:bg-teal-600 transition ${
+                      sortBy === "score" ? "ring-2 ring-teal-300" : ""
+                    }`}
+                  >
+                    <StarIcon className="w-5 h-5" />
+                    {sortBy === "score" && (
+                      sortOrder === "asc" ? (
+                        <ArrowUpIcon className="w-5 h-5 ml-2" />
+                      ) : (
+                        <ArrowDownIcon className="w-5 h-5 ml-2" />
+                      )
+                    )}
+                  </button>
+                  {/* Ordenar por Custo */}
+                  <button
+                    onClick={() => handleSort("cost")}
+                    className={`flex items-center bg-teal-700 text-white p-3 rounded-md hover:bg-teal-600 transition ${
+                      sortBy === "cost" ? "ring-2 ring-teal-300" : ""
+                    }`}
+                  >
+                    <CurrencyEuroIcon className="w-5 h-5" />
+                    {sortBy === "cost" && (
+                      sortOrder === "asc" ? (
+                        <ArrowUpIcon className="w-5 h-5 ml-2" />
+                      ) : (
+                        <ArrowDownIcon className="w-5 h-5 ml-2" />
+                      )
+                    )}
+                  </button>
                 </div>
-                <p className="text-sm text-gray-500 mt-2">
-                  Score: <span className="font-medium text-teal-600">{(result.score * 100).toFixed(2)}%</span>
-                </p>
-                {isExpanded && (
-                  <div className="mt-4 bg-white border rounded-lg p-4 shadow-inner">
-                    <h3 className="font-bold text-teal-700 mb-3">Details:</h3>
-                    <ul className="grid grid-cols-2 gap-4 text-sm text-gray-600">
-                      <li>
-                        <span className="font-semibold">Parking:</span> {result.park.hasParking ? "Yes" : "No"}
-                      </li>
-                      <li>
-                        <span className="font-semibold">Meeting Rooms:</span> {result.park.hasMeetingRooms ? "Yes" : "No"}
-                      </li>
-                      <li>
-                        <span className="font-semibold">Office Furniture:</span> {result.park.hasOfficeWithFurniture ? "Yes" : "No"}
-                      </li>
-                      <li>
-                        <span className="font-semibold">Transport:</span> {result.park.hasTransport ? "Yes" : "No"}
-                      </li>
-                      <li>
-                        <span className="font-semibold">Canteen:</span> {result.park.hasCanteen ? "Yes" : "No"}
-                      </li>
-                    </ul>
-                    <h4 className="font-bold text-teal-700 mt-4 mb-2">Criterion Contributions:</h4>
-                    <table className="w-full border-collapse border border-gray-300 text-sm">
-                      <thead className="bg-gray-100">
-                        <tr>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Criterion</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Priority</th>
-                          <th className="border border-gray-300 px-4 py-2 text-left">Contribution (%)</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Object.entries(result.contributions).map(([key, value]) => {
-                          const priority = criteria.find((criterion) => criterion.key === key)?.priority || "N/A";
+              )}
+            </div>
+            <hr className="mb-6 border-2 rounded" />
+            {results.length > 0 ? (
+              <ul className="space-y-4">
+                {results.map((result, index) => {
+                  const bestResults = getBestResults();
+                  const isBest = bestResults.some((r) => r.park.name === result.park.name);
+                  const isExpanded = expandedIndex === index;
 
-                          return (
-                            <tr key={key}>
-                              <td className="border border-gray-300 px-4 py-2 capitalize">
-                                {key.replace(/([A-Z])/g, " $1")}
-                              </td>
-                              <td className="border border-gray-300 px-4 py-2">{priority}</td>
-                              <td className="border border-gray-300 px-4 py-2">
-                                {(value * result.score * 100).toFixed(2)}%
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <p className="text-gray-500 italic text-lg text-left">
-          No results found, try a new search.
-        </p>
+                  return (
+                    <li
+                      key={index}
+                      className={`border p-4 rounded-lg shadow-sm transition cursor-pointer ${
+                        isBest ? "bg-green-50 border-green-500" : "bg-gray-50 border-gray-300"
+                      } ${!isExpanded ? "hover:shadow-lg" : ""}`}
+                      onClick={() => toggleDetails(index)}
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <h2 className="text-lg font-semibold text-teal-700">
+                            {result.park.name}
+                          </h2>
+                          <p className="text-gray-600">
+                            {result.park.location} &bull; €{result.park.cost}/month
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          {isBest && (
+                            <StarIcon className="w-5 h-5 text-teal-700 ml-auto mb-2" />
+                          )}
+                          <p className="text-sm text-gray-500">
+                            Score:{" "}
+                            <span className="font-medium text-teal-600">
+                              {(result.score * 100).toFixed(2)}%
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+
+                      {isExpanded && (
+                        <div className="mt-4 bg-white border rounded-lg p-6 shadow-inner">
+                          <h3 className="font-bold text-teal-700 mb-3">Details:</h3>
+                          <ul className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                            <li>
+                              <span className="font-semibold flex items-center content-center"><TruckIcon className="w-4 h-4"/>&nbsp;Parking:&nbsp; {result.park.hasParking ? <CheckIcon className="w-5 h-5 text-green-600"/> : <XMarkIcon className="w-5 h-5 text-red-600"/>}</span> 
+                            </li>
+                            <li>
+                              <span className="font-semibold flex items-center content-center"><PresentationChartBarIcon className="w-4 h-4"/>&nbsp;Meeting Rooms:&nbsp; {result.park.hasMeetingRooms ? <CheckIcon className="w-5 h-5 text-green-600"/> : <XMarkIcon className="w-5 h-5 text-red-600"/>}</span>
+                            </li>
+                            <li>
+                              <span className="font-semibold flex items-center content-center"><WifiIcon className="w-4 h-4"/>&nbsp;Office With Furniture:&nbsp; {result.park.hasOfficeWithFurniture ? <CheckIcon className="w-5 h-5 text-green-600"/> : <XMarkIcon className="w-5 h-5 text-red-600"/>}</span>
+                            </li>
+                            <li>
+                              <span className="font-semibold flex items-center content-center"><MapIcon className="w-4 h-4"/>&nbsp;Transport:&nbsp; {result.park.hasTransport ? <CheckIcon className="w-5 h-5 text-green-600"/> : <XMarkIcon className="w-5 h-5 text-red-600"/>}</span>
+                            </li>
+                            <li>
+                              <span className="font-semibold flex items-center content-center"><ArchiveBoxIcon className="w-4 h-4"/>&nbsp;Canteen:&nbsp; {result.park.hasCanteen ? <CheckIcon className="w-5 h-5 text-green-600"/> : <XMarkIcon className="w-5 h-5 text-red-600"/>}</span>
+                            </li>
+                          </ul>
+                          <h4 className="font-bold text-teal-700 mt-6 mb-2">Criteria Contributions:</h4>
+                          <table className="w-full border-collapse border border-gray-300 text-sm">
+                            <thead className="bg-gray-100">
+                              <tr>
+                                <th className="border border-gray-300 px-4 py-2 text-left">Criteria</th>
+                                <th className="border border-gray-300 px-4 py-2 text-left">Priority</th>
+                                <th className="border border-gray-300 px-4 py-2 text-left">Contribution (%)</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {Object.entries(result.contributions).map(([key, value]) => {
+                                const priority = criteria.find((criterion) => criterion.key === key)?.priority || "N/A";
+
+                                return (
+                                  <tr key={key}>
+                                    <td className="border border-gray-300 px-4 py-2 capitalize">
+                                      {key.replace(/([A-Z])/g, " $1")}
+                                    </td>
+                                    <td className="border border-gray-300 px-4 py-2">{priority}</td>
+                                    <td className="border border-gray-300 px-4 py-2">
+                                      {(value * result.score * 100).toFixed(2)}%
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="text-gray-500 italic text-lg text-left">
+                No results found, try a new search.
+              </p>
+            )}
+          </div>
+        </div>
       )}
-    </div>
-  </div>
-)}
-
-
       </>
   );
 }

@@ -25,7 +25,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   return (
     <div className="w-20 h-full bg-teal-700 text-white flex flex-col items-center py-4">
       {/* Logo */}
-      <button className="mb-10 bg-white p-2 rounded" onClick={() => location.reload()}>
+      <button className="mb-10 bg-white p-2 rounded hover:shadow-xl transition" onClick={() => location.reload()}>
         <Image
           src="/images/logo-nobg.png"
           alt="App Logo"
