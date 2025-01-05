@@ -18,6 +18,9 @@ COPY . .
 # Compile TypeScript
 RUN npm run build
 
+# Ensure the dist folder exists and contains the compiled code
+RUN ls -la dist
+
 # Expose the port the app runs on
 EXPOSE 3000
 
