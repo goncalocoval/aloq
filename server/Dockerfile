@@ -1,5 +1,3 @@
-# Dockerfile for the backend
-
 # Use the official Node.js image as a base
 FROM node:22
 
