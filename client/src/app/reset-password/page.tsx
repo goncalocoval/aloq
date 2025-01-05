@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+
+import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import api from "../../lib/apiService";
 
-export default function ResetPassword() {
+function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [password, setPassword] = useState("");
@@ -71,8 +72,9 @@ export default function ResetPassword() {
           <input
             type="password"
             placeholder="New Password"
-            className={`w-full border p-2 rounded ${validationError && !password ? "border-red-500" : "border-gray-300"
-              }`}
+            className={`w-full border p-2 rounded ${
+              validationError && !password ? "border-red-500" : "border-gray-300"
+            }`}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -84,8 +86,9 @@ export default function ResetPassword() {
           <input
             type="password"
             placeholder="Confirm Password"
-            className={`w-full border p-2 rounded ${validationError && !confirmPassword ? "border-red-500" : "border-gray-300"
-              }`}
+            className={`w-full border p-2 rounded ${
+              validationError && !confirmPassword ? "border-red-500" : "border-gray-300"
+            }`}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
@@ -101,5 +104,13 @@ export default function ResetPassword() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function ResetPassword() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
