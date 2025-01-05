@@ -16,8 +16,8 @@ COPY . .
 # Compile TypeScript
 RUN npm run build
 
-# Ensure the dist folder exists and contains the compiled code
-RUN ls -la dist
+# List the contents of the dist folder for debugging
+RUN echo "Contents of dist folder:" && ls -la dist
 
 # Expose the port the app runs on
 EXPOSE 3000
