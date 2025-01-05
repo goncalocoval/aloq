@@ -1,3 +1,5 @@
+# Dockerfile for the backend
+
 # Use the official Node.js image as a base
 FROM node:22
 
@@ -13,14 +15,14 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Compile TypeScript
+# Build the application
 RUN npm run build
 
-# List the contents of the dist folder for debugging
-RUN echo "Contents of dist folder:" && ls -la dist
+# Generate Prisma Client
+RUN npx prisma generate
 
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Run Prisma migrations and then start the application
-CMD ["sh", "-c", "npx prisma migrate deploy && npm run start:prod"]
+# Command to run the application
+CMD ["npm", "run", "start:prod"]
