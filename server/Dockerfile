@@ -15,14 +15,11 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Build the application
+# Compile TypeScript
 RUN npm run build
-
-# Generate Prisma Client
-RUN npx prisma generate
 
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Command to run the application
+# Run Prisma migrations and then start the application
 CMD ["sh", "-c", "npx prisma migrate deploy && npm run start:prod"]
