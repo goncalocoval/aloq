@@ -14,8 +14,8 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: 'Aloq',
-  description: 'Platform to find the best business parks for startups.',
+  title: 'Aloq Platform',
+  description: 'The best tool for startups and tech park.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

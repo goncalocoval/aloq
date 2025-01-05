@@ -1,6 +1,6 @@
 # Aloq
 
-![Aloq Logo](https://aloq.vercel.app/_next/image?url=%2Fimages%2Flogo-nobg.png&w=256&q=75)
+![Aloq Logo](client/public/images/logo-nobg.png)
 
 Aloq is an application designed to help startups and businesses choose the best technology park or incubator based on multiple criteria such as location, cost, and service availability. The application leverages the AHP (Analytic Hierarchy Process) method to calculate the optimal option, offering a user-friendly and intuitive interface.
 
