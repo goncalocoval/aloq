@@ -105,6 +105,7 @@ Create `.env` files for both backend and frontend with the following configurati
 DATABASE_URL=postgresql://<username>:<password>@<host>:<port>/<database-name>
 JWT_SECRET=<your-jwt-secret>
 FRONTEND_URL=<current-frontend-url>
+```
 
 ### Frontend  
 ```env
