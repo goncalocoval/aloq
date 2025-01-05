@@ -1,0 +1,7 @@
+.scroll-snap {
+scroll-snap-type: y mandatory; /* Snap no eixo vertical */
+}
+
+.snap-y > div {
+scroll-snap-align: start; /* Travar no início de cada seção */
+}

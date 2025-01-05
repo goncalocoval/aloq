@@ -31,9 +31,9 @@ model Park {
   location               String
   hasParking             Boolean
   hasMeetingRooms        Boolean
-  hasOfficeFurniture     Boolean
-  hasWiFiAndPrinter      Boolean
-  hasTransportAndCanteen Boolean
+  hasOfficeWithFurniture Boolean
+  hasTransport           Boolean
+  hasCanteen             Boolean
 }
 
 model Search {

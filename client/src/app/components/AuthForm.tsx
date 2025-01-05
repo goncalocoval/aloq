@@ -6,12 +6,15 @@ import "../styles/AuthForm.css";
 import { ArrowRightEndOnRectangleIcon, UserPlusIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/navigation";
 import api from "../../lib/apiService";
+import ForgotPasswordModal from "./ForgotPasswordModal";
 
 export default function AuthForm() {
-  const [isLogin, setIsLogin] = useState(true); // true = login, false = register
+  const [isLogin, setIsLogin] = useState(true); // Alternar entre login e registro
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // Mensagem de sucesso
   const router = useRouter();
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -20,6 +23,7 @@ export default function AuthForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(""); // Resetar erro anterior
+    setSuccessMessage(""); // Resetar mensagem de sucesso anterior
 
     try {
       if (isLogin) {
@@ -42,11 +46,21 @@ export default function AuthForm() {
           password: formData.password,
         });
 
-        // Após o registro bem-sucedido, redirecionar para o login
+        // Após o registro bem-sucedido, exibir mensagem de sucesso
+        setSuccessMessage("Account created successfully! Please check your email to verify your account.");
+        
+        // Manter email e password preenchidos para o login
+        setFormData({
+          name: "",
+          email: formData.email, // Manter o email no campo
+          password: formData.password, // Manter a senha no campo
+        });
+
+        // Alternar para o formulário de login
         setIsLogin(true);
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || "Something went wrong. Please try again.");
+      setError(err.response?.data["message"] || "Something went wrong. Please try again.");
     }
   };
 
@@ -73,18 +87,18 @@ export default function AuthForm() {
       {/* Form / Right Section */}
       <div className="w-1/2 bg-white flex flex-col justify-center items-center">
         {/* Toggle Buttons */}
-        <div className="flex space-x-4 mb-4">
+        <div className="flex space-x-4 mb-4 transition">
           <button
-            className={`p-2 rounded ${
-              isLogin ? "bg-teal-700 text-white" : "bg-transparent text-teal-700"
+            className={`p-2 rounded transition ${
+              isLogin ? "bg-teal-700 text-white" : "bg-transparent text-teal-700 hover:bg-gray-200"
             }`}
             onClick={() => setIsLogin(true)}
           >
             <ArrowRightEndOnRectangleIcon className="w-5 h-5" />
           </button>
           <button
-            className={`p-2 rounded ${
-              !isLogin ? "bg-teal-700 text-white" : "bg-transparent text-teal-700"
+            className={`p-2 rounded transition ${
+              !isLogin ? "bg-teal-700 text-white" : "bg-transparent text-teal-700 hover:bg-gray-200"
             }`}
             onClick={() => setIsLogin(false)}
           >
@@ -93,7 +107,7 @@ export default function AuthForm() {
         </div>
 
         {/* Form Section */}
-        <form onSubmit={handleSubmit} className="bg-teal-700 rounded p-8 shadow-lg w-80">
+        <form onSubmit={handleSubmit} className="bg-teal-700 rounded p-8 shadow-lg w-80 transition">
           {isLogin ? (
             <>
               <h2 className="text-xl font-semibold mb-4 text-white">
@@ -106,6 +120,7 @@ export default function AuthForm() {
                 className="w-full mb-4 p-2 border rounded"
                 value={formData.email}
                 onChange={handleInputChange}
+                required
               />
               <input
                 type="password"
@@ -114,14 +129,20 @@ export default function AuthForm() {
                 className="w-full mb-4 p-2 border rounded"
                 value={formData.password}
                 onChange={handleInputChange}
+                required
               />
-              {error && <p className="text-red-500 text-sm">{error}</p>}
+              {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+              {successMessage && <p className="text-green-500 text-sm mb-3">{successMessage}</p>} {/* Exibe a mensagem de sucesso no login */}
               <div className="text-right mb-4">
-                <a href="/reset-password" className="text-white hover:underline text-sm">
+                <button
+                  type="button" // Prevenir comportamento de submit
+                  onClick={() => setIsForgotPasswordOpen(true)}
+                  className="text-white hover:underline text-sm"
+                >
                   Forgot password?
-                </a>
+                </button>
               </div>
-              <button className="w-full bg-white text-teal-700 p-2 rounded">
+              <button type="submit" className="w-full bg-white text-teal-700 p-2 rounded transition hover:bg-gray-200">
                 Login &rarr;
               </button>
             </>
@@ -137,6 +158,7 @@ export default function AuthForm() {
                 className="w-full mb-4 p-2 border rounded"
                 value={formData.name}
                 onChange={handleInputChange}
+                required
               />
               <input
                 type="email"
@@ -145,6 +167,7 @@ export default function AuthForm() {
                 className="w-full mb-4 p-2 border rounded"
                 value={formData.email}
                 onChange={handleInputChange}
+                required
               />
               <input
                 type="password"
@@ -153,19 +176,28 @@ export default function AuthForm() {
                 className="w-full mb-4 p-2 border rounded"
                 value={formData.password}
                 onChange={handleInputChange}
+                minLength={6}
+                maxLength={20}
+                required
               />
-              <label className="flex items-center text-white mb-4">
-                <input type="checkbox" className="mr-2" />
-                I agree with the Terms & Conditions
+              <label className="flex items-center text-white mb-4 text-sm">
+                <input type="checkbox" className="mr-2" required/>
+                I agree with Terms & Conditions
               </label>
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-              <button className="w-full bg-white text-teal-700 p-2 rounded">
+              {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+              <button type="submit" className="w-full bg-white text-teal-700 p-2 rounded transition hover:bg-gray-200">
                 Sign up &rarr;
               </button>
             </>
           )}
         </form>
       </div>
+
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal
+        isOpen={isForgotPasswordOpen}
+        onClose={() => setIsForgotPasswordOpen(false)}
+      />
     </div>
   );
 }

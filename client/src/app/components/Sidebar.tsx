@@ -37,24 +37,24 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
 
       {/* Navigation Items */}
       <button
-        className={`flex w-12 h-12 justify-center items-center mb-10 rounded ${
-          activeTab === "profile" ? "bg-white text-teal-700" : "bg-transparent text-white"
+        className={`flex w-12 h-12 justify-center items-center mb-10 rounded transition  ${
+          activeTab === "profile" ? "bg-white text-teal-700" : "bg-transparent text-white hover:bg-teal-600"
         }`}
         onClick={() => setActiveTab("profile")}
       >
         <UserIcon className="w-7" />
       </button>
       <button
-        className={`flex w-12 h-12 justify-center items-center mb-10 rounded ${
-          activeTab === "search" ? "bg-white text-teal-700" : "bg-transparent text-white"
+        className={`flex w-12 h-12 justify-center items-center mb-10 rounded transition ${
+          activeTab === "search" ? "bg-white text-teal-700" : "bg-transparent text-white hover:bg-teal-600"
         }`}
         onClick={() => setActiveTab("search")}
       >
         <PlusCircleIcon className="w-7" />
       </button>
       <button
-        className={`flex w-12 h-12 justify-center items-center mb-10 rounded ${
-          activeTab === "history" ? "bg-white text-teal-700" : "bg-transparent text-white"
+        className={`flex w-12 h-12 justify-center items-center mb-10 rounded transition ${
+          activeTab === "history" ? "bg-white text-teal-700" : "bg-transparent text-white hover:bg-teal-600"
         }`}
         onClick={() => setActiveTab("history")}
       >
@@ -62,7 +62,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
       </button>
 
       {/* Logout */}
-      <button className="mt-auto text-red-500" onClick={() => setShowModal(true)}>
+      <button className="mt-auto text-red-500 hover:bg-red-50 p-2 rounded transition" onClick={() => setShowModal(true)}>
         <ArrowLeftEndOnRectangleIcon className="w-7" />
       </button>
 
@@ -74,13 +74,13 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
             <p className="mb-4 text-black">Are you sure you want to log out?</p>
             <div className="flex space-x-4">
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded"
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
                 onClick={handleLogout}
               >
                 Yes, Logout
               </button>
               <button
-                className="bg-gray-300 text-black px-4 py-2 rounded"
+                className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400 transition"
                 onClick={() => setShowModal(false)}
               >
                 Cancel

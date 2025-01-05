@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Park" ALTER COLUMN "hasCanteen" DROP DEFAULT,
+ALTER COLUMN "hasOfficeWithFurniture" DROP DEFAULT,
+ALTER COLUMN "hasTransport" DROP DEFAULT;

@@ -6,6 +6,7 @@ import Sidebar from '../components/Sidebar';
 import Profile from '../components/Profile';
 import Search from '../components/Search';
 import History from '../components/History';
+import Loader from '../components/Loader';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function Dashboard() {
 
   if (loading) {
     // Exibe o estado de carregamento
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   return (
