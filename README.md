@@ -44,8 +44,8 @@ Ensure you have the following tools installed:
 
 1. Clone the repository and navigate to the backend directory:  
    ```bash
-   git clone https://github.com/<your-username>/aloq.git
-   cd aloq/backend
+   git clone https://github.com/goncalocoval/aloq.git
+   cd aloq/server
    ```
 
 2. Install dependencies:  
@@ -76,7 +76,7 @@ Ensure you have the following tools installed:
 
 1. Navigate to the frontend directory:  
    ```bash
-   cd ../frontend
+   cd ../client
    ```
 
 2. Install dependencies:  
