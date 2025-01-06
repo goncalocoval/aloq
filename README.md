@@ -142,7 +142,7 @@ NEXT_PUBLIC_API_URL=<current-backend-url>
 
 ## Documentation
 
-- [User Manual (PDF)](docs/User_Manual.pdf)
+- [User Manual (PDF)](User_Manual.pdf)
 
 ---
 
